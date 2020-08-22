@@ -1,0 +1,13 @@
+{
+  "api": {
+    "key": "TRELLO_API_KEY",
+    "secret": "TRELLO_API_SECRET",
+    "token": "TRELLO_API_TOKEN"
+  },
+  "settings": {
+    "board": "TRELLO_BOARD",
+    "mediaType": "MEDIA_TYPE",
+    "labelRestriction": "LABEL_RESTRICTION",
+    "entryType": "ENTRY_TYPE"
+  }
+}

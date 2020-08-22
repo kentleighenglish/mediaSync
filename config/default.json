@@ -1,0 +1,9 @@
+{
+  "api": {
+
+  },
+  "settings": {
+    "mediaType": "films",
+    "entryType": "checklist"
+  }
+}
