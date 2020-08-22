@@ -37,7 +37,7 @@ class MediaLib {
 	filmExists(filmPath) {
 		const fileName = filmPath.match(/[^\/]+$/)[0];
 
-		return fs.existsSync(`${this.convertDirectory}${filmPath}/${fileName}.mp4`);
+		return fs.existsSync(`${this.convertDirectory}/${filmPath}/${fileName}.mp4`);
 		return true;
 	}
 
@@ -74,23 +74,40 @@ class MediaLib {
 				const videoPath = await this.getTorrentVideoFile(torrent.location);
 
 				// Convert and copy completed torrents (find video file by extension probably)
-				const savePath = torrent.location.replace(this.downloadDirectory, "");
-				const saveFilename = savePath.match(/[^\/]+$/)[0];
+				const originalSavePath = torrent.location.replace(this.downloadDirectory, "");
+				const saveFilename = originalSavePath.match(/[^\/]+$/)[0];
 
-				const saveDirectory = `${this.convertDirectory}${savePath}`;
+				const saveDirectory = `${this.convertDirectory}${originalSavePath}`;
+				const savePath = `${saveDirectory}/${saveFilename}.mp4`;
 
 				if (!fs.existsSync(saveDirectory)) fs.mkdirSync(saveDirectory, { recursive: true });
 
-				debug(`Converting ${torrent.name} to mp4`)
-				debug(`and saving converted file in ${saveDirectory}`);
-				const { stdout, stderr } = shell.exec(`ffmpeg -i "${videoPath}" -f mp4 -vcodec h264 -acodec libmp3lame "${saveDirectory}/${saveFilename}.mp4"`, { silent: true })
+				const { stdout: codec, stderr: codecError } = shell.exec(`ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "${videoPath}"`, { silent: true });
 
-				if (stderr) {
-					throw stderr;
+				if (codecError) {
+					throw codecError;
 				}
+
+				if (!codec || (codec && !codec.includes("h264"))) {
+					debug(`Converting ${torrent.name} to mp4`)
+					debug(`and saving converted file in ${saveDirectory}`);
+					const { stdout: convertOut, stderr: convertErr } = shell.exec(`ffmpeg -i "${videoPath}" -f mp4 -vcodec h264 -acodec libmp3lame "${savePath}"`, { silent: true })
+
+					if (convertErr) {
+						throw convertErr;
+					}
+				} else {
+					debug(`File is already mp4 + h264; copying file`);
+					fs.copyFileSync(videoPath, savePath);
+					debug(`File copied: ${savePath}`);
+				}
+
+				debug(`Removing torrent for ${torrent.name}`);
+				await torrent.removeTorrent(torrent.id);
 			}
 		}));
 
+		debug(`Sync complete`);
 	}
 
 	/*

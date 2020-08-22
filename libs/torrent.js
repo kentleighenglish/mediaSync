@@ -181,6 +181,25 @@ class TorrentLib {
 
 		debug(`Could not find a torrent for ${name}`);
 	}
+
+	/*
+	 * Removes a torrent from the active torrent list, by id
+	 * @param {number} id
+	 * @return boolean
+	 */
+	async removeTorrent(id) {
+		if (id) {
+			const { stderr } = shell.exec(`transmission-remote -t${id} -rad`);
+
+			if (stderr) {
+				throw stderr;
+			}
+
+			return true;
+		} else {
+			throw "Cannot remove torrent - missing torrent ID";
+		}
+	}
 }
 
 module.exports = TorrentLib;
