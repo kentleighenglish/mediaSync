@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
-source ./.env
-
 if [ -f /.dockerenv ]; then
+	echo "Installing ffmpeg";
 	apk add --no-cache ffmpeg;
+	echo "Installing transmission";
+	apk add --no-cache transmission-daemon
+	echo "Installing transmission-cli";
+	apk add --no-cache transmission-cli
+else
+	source ./.env;
 fi;
 
 if [ $MEDIA_TYPE = 'films' ]; then
@@ -25,6 +30,12 @@ fi
 if ! command -v ffmpeg &> /dev/null
 then
     echo "ffmpeg is required, please install it"
+    exit
+fi
+
+if ! command -v transmission-remote &> /dev/null
+then
+    echo "transmission-remote is required, please install it"
     exit
 fi
 

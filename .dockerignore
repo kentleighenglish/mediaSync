@@ -1,0 +1,8 @@
+downloads/
+library/
+node_modules/
+.git/
+.gitlab/
+
+.env
+.gitlab-ci.yml
