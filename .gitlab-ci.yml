@@ -1,6 +1,9 @@
 stages:
   - build
 
+variables:
+    DOCKER_CLI_EXPERIMENTAL: enabled
+
 build:
   stage: build
   script: . .gitlab/build.sh

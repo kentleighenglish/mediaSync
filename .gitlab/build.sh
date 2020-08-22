@@ -5,10 +5,17 @@ tag=$CI_BUILD_REF_SLUG
 repo="media-sync"
 
 # Get buildx
-export DOCKER_CLI_EXPERIMENTAL=enabled
+mkdir -p $HOME/.docker/cli-plugins/
+
+wget -O $HOME/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.2.0/buildx-v0.2.0.linux-arm-v7
+chmod a+x $HOME/.docker/cli-plugins/docker-buildx
+echo -e '{\n  \"experimental\": \"enabled\"\n}' | tee $HOME/.docker/config.json
+
+#export DOCKER_CLI_EXPERIMENTAL=enabled
 
 # Start up QEMU to allow arm7l emulation
-docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+#docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
 
 buildImage()
 {
