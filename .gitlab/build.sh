@@ -8,7 +8,10 @@ repo="media-sync"
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
 # Start up QEMU to allow arm7l emulation
-docker run --privileged --rm docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
+
+echo "Checking if QEMU is running..."
+cat /proc/sys/fs/binfmt_misc/qemu-aarch64
 
 buildImage()
 {
