@@ -14,11 +14,11 @@ echo -e "{\n  \"experimental\": \"enabled\" }" | tee $HOME/.docker/config.json
 #export DOCKER_CLI_EXPERIMENTAL=enabled
 
 # Start up QEMU to allow arm7l emulation
-docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-#docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
+#docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
 
-docker buildx create --use --driver docker-container --name armv7builder --platform=linux/arm/v7
-docker buildx inspect --bootstrap armv7builder
+#docker buildx create --use --driver docker-container --name armv7builder --platform=linux/arm/v7
+#docker buildx inspect --bootstrap armv7builder
 docker buildx ls
 
 buildImage()
