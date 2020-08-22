@@ -4,6 +4,10 @@ tag=$CI_BUILD_REF_SLUG
 
 repo="media-sync"
 
+# Put docker in experimental mode
+export DOCKER_CLI_EXPERIMENTAL=enabled
+
+# Start up QEMU to allow arm7l emulation
 docker run --privileged --rm docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
 
 buildImage()
