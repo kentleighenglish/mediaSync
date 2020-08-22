@@ -5,16 +5,10 @@ tag=$CI_BUILD_REF_SLUG
 repo="media-sync"
 
 # Get buildx
-wget https://github.com/docker/buildx/releases/download/v0.2.0/buildx-v0.2.0.linux-arm-v7
-mkdir -p ~/.docker/cli-plugins/
-mv ./buildx-v0.2.0.linux-arm-v7 ~/.docker/cli-plugins/docker-buildx
-#export DOCKER_CLI_EXPERIMENTAL=enabled
+export DOCKER_CLI_EXPERIMENTAL=enabled
 
 # Start up QEMU to allow arm7l emulation
 docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
-
-echo "Checking if QEMU is running..."
-cat /proc/sys/fs/binfmt_misc/qemu-aarch64
 
 buildImage()
 {
@@ -29,7 +23,7 @@ buildImage()
 	docker login rg.nl-ams.scw.cloud/ikenga -u $ACCESS_TOKEN -p $SECRET_TOKEN
 
 	echo "Building $name";
-	docker buildx build  --platform linux/arm/v7 --target=$@ --tag=$name .;
+	docker buildx build  --platform=linux/arm/v7 --target=$@ --tag=$name .;
 
 	echo "Tagging..."
 	docker tag $name rg.nl-ams.scw.cloud/ikenga/$name
