@@ -4,8 +4,6 @@ tag=$CI_BUILD_REF_SLUG
 
 repo="media-sync"
 
-apt-get install qemu binfmt-support qemu-user-static
-
 # Get buildx
 mkdir -p $HOME/.docker/cli-plugins/
 
@@ -17,8 +15,8 @@ echo -e "{\n  \"experimental\": \"enabled\" }" | tee $HOME/.docker/config.json
 # Start up QEMU to allow arm7l emulation
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
-#docker buildx create --use --driver docker-container --name armv7builder --platform=linux/arm/v7
-#docker buildx inspect --bootstrap armv7builder
+docker buildx create --use --driver docker-container --name armv7builder --platform=linux/arm/v7
+docker buildx inspect --bootstrap armv7builder
 docker buildx ls
 
 buildImage()
@@ -34,7 +32,7 @@ buildImage()
 	docker login rg.nl-ams.scw.cloud/ikenga -u $ACCESS_TOKEN -p $SECRET_TOKEN
 
 	echo "Building $name";
-	docker buildx build  --platform=linux/arm/v7 --target=$@ --tag=$name .;
+	docker buildx build  --platform linux/arm/v7 --target=$@ --tag=$name .;
 
 	echo "Tagging..."
 	docker tag $name rg.nl-ams.scw.cloud/ikenga/$name
