@@ -17,6 +17,8 @@ echo -e "{\n  \"experimental\": \"enabled\" }" | tee $HOME/.docker/config.json
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 #docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
 
+docker buildx ls
+
 buildImage()
 {
 	name=$@
