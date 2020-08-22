@@ -6,7 +6,7 @@ repo="media-sync"
 
 # Get buildx
 wget https://github.com/docker/buildx/releases/download/v0.2.0/buildx-v0.2.0.linux-arm-v7
-mv buildx-v0.2.0.linux-arm-v7 ~/.docker/cli-plugins/docker-buildx
+mv ./buildx-v0.2.0.linux-arm-v7 ~/.docker/cli-plugins/docker-buildx
 #export DOCKER_CLI_EXPERIMENTAL=enabled
 
 # Start up QEMU to allow arm7l emulation
