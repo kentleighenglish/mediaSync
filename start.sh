@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ -f /.dockerenv ]; then
 	echo "Installing ffmpeg";
