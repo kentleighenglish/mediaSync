@@ -4,6 +4,8 @@ tag=$CI_BUILD_REF_SLUG
 
 repo="media-sync"
 
+docker run --privileged --rm docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+
 buildImage()
 {
 	name=$@
@@ -17,7 +19,7 @@ buildImage()
 	docker login rg.nl-ams.scw.cloud/ikenga -u $ACCESS_TOKEN -p $SECRET_TOKEN
 
 	echo "Building $name";
-	docker build --target=$@ --tag=$name .;
+	docker buildx build  --platform linux/arm/v7 --target=$@ --tag=$name .;
 
 	echo "Tagging..."
 	docker tag $name rg.nl-ams.scw.cloud/ikenga/$name
