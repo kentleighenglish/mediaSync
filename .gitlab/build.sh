@@ -4,8 +4,10 @@ tag=$CI_BUILD_REF_SLUG
 
 repo="media-sync"
 
-# Put docker in experimental mode
-export DOCKER_CLI_EXPERIMENTAL=enabled
+# Get buildx
+wget https://github.com/docker/buildx/releases/download/v0.2.0/buildx-v0.2.0.linux-arm-v7
+mv buildx-v0.2.0.linux-amd64 ~/.docker/cli-plugins/docker-buildx
+#export DOCKER_CLI_EXPERIMENTAL=enabled
 
 # Start up QEMU to allow arm7l emulation
 docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
