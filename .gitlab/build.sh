@@ -7,7 +7,7 @@ repo="media-sync"
 # Get buildx
 mkdir -p $HOME/.docker/cli-plugins/
 
-wget -O $HOME/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.2.0/buildx-v0.2.0.linux-arm-v7
+wget -O $HOME/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.5.1/buildx-v0.5.1.linux-amd64
 chmod a+x $HOME/.docker/cli-plugins/docker-buildx
 echo -e "{\n  \"experimental\": \"enabled\" }" | tee $HOME/.docker/config.json
 
@@ -17,7 +17,6 @@ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
 docker buildx create --use --driver docker-container --name armv7builder --platform=linux/arm/v7
 docker buildx inspect --bootstrap armv7builder
-docker buildx ls
 
 buildImage()
 {
@@ -29,16 +28,16 @@ buildImage()
 	fi
 
 	echo "Logging in"
-	#docker login rg.nl-ams.scw.cloud/ikenga -u $ACCESS_TOKEN -p $SECRET_TOKEN
+	docker login rg.nl-ams.scw.cloud/ikenga -u $ACCESS_TOKEN -p $SECRET_TOKEN
 
 	echo "Building $name";
-	docker buildx build  --platform linux/arm/v7 --target=$@ --tag=$name .;
+	docker buildx build --platform linux/arm/v7 --target=$@ --tag=$name .;
 
 	echo "Tagging..."
-	#docker tag $name rg.nl-ams.scw.cloud/ikenga/$name
+	docker tag $name rg.nl-ams.scw.cloud/ikenga/$name
 
 	echo "Pushing..."
-	#docker push rg.nl-ams.scw.cloud/ikenga/$name
+	docker push rg.nl-ams.scw.cloud/ikenga/$name
 	echo;
 }
 
