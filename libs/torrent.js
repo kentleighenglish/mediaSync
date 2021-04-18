@@ -85,7 +85,7 @@ class TorrentLib {
 		try {
 			const outputPath = path.resolve(this.downloadDirectory, torrentPath);
 
-			const { stderr } = shell.exec(`transmission-remote -n "transmission:transmission" -w "${outputPath}" -a "${magnet}"`, { silent: true });
+			const { stderr } = shell.exec(`transmission-remote -s -n "transmission:transmission" -w "${outputPath}" -a "${magnet}"`, { silent: true });
 
 			if (stderr) {
 				throw stderr;
