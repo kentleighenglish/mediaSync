@@ -103,7 +103,7 @@ class MediaLib {
 				}
 
 				debug(`Removing torrent for ${torrent.name}`);
-				await torrent.removeTorrent(torrent.id);
+				await this.torrent.removeTorrent(torrent.id);
 			}
 		}));
 
