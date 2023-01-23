@@ -21,7 +21,7 @@ if (!boardId) {
 }
 
 let jobRunning = false;
-const job = new cron.CronJob('*/5 * * * * *', async () => {
+const job = new cron.CronJob('*/10 * * * * *', async () => {
 	if (jobRunning === true) {
 		return;
 	}

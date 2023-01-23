@@ -156,7 +156,9 @@ class TorrentLib {
 		const { data: { movie_count, movies = [] } } = (altApiResult || apiResult);
 
 		if (movie_count) {
-			let { torrents = [], title_long } = movies[0];
+			const filteredMovies = movies.filter(m => this._getSimilarity(name, m.title_long) > 0.8);
+
+			let { torrents = [], title_long } = filteredMovies[0];
 
 			if (torrents.length) {
 				torrents = sortBy(torrents, "seeds");
@@ -199,6 +201,47 @@ class TorrentLib {
 		} else {
 			throw "Cannot remove torrent - missing torrent ID";
 		}
+	}
+
+	_getSimilarity(str1, str2) {
+		function editDistance(s1, s2) {
+			s1 = s1.toLowerCase();
+			s2 = s2.toLowerCase();
+
+			var costs = new Array();
+			for (var i = 0; i <= s1.length; i++) {
+				var lastValue = i;
+				for (var j = 0; j <= s2.length; j++) {
+					if (i == 0)
+					costs[j] = j;
+					else {
+						if (j > 0) {
+							var newValue = costs[j - 1];
+							if (s1.charAt(i - 1) != s2.charAt(j - 1))
+							newValue = Math.min(Math.min(newValue, lastValue),
+							costs[j]) + 1;
+							costs[j - 1] = lastValue;
+							lastValue = newValue;
+						}
+					}
+				}
+				if (i > 0)
+				costs[s2.length] = lastValue;
+			}
+			return costs[s2.length];
+		}
+
+		var longer = str1;
+		var shorter = str2;
+		if (str1.length < str2.length) {
+			longer = str2;
+			shorter = str1;
+		}
+		var longerLength = longer.length;
+		if (longerLength == 0) {
+			return 1.0;
+		}
+		return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
 	}
 }
 

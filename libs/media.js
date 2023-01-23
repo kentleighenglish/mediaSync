@@ -4,6 +4,7 @@ const fs = require("fs");
 const debug = require("debug")("app:medialib");
 
 const TorrentLib = require("./torrent");
+const trelloApi = require('../trello');
 
 const videoExtension = ["mp4", "mov", "wmv", "flv", "webm", "avi", "mkv"];
 

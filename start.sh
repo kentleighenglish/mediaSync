@@ -21,7 +21,7 @@ if [ $MEDIA_TYPE = 'films' ]; then
 			;;
 		*)
 			echo "Killing transmission-daemon duplicates"
-			kill $(pidof transmission-daemon | awk '{print $1}')
+			sudo kill $(pidof transmission-daemon | awk '{print $1}')
 			;;
 	esac;
 	echo "";
